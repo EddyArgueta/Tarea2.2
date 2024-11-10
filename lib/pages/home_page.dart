@@ -10,6 +10,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
+        backgroundColor:const Color.fromARGB(255, 252, 250, 166),
       ),
       body: Center(
         child: Text('Bienvenido(a), $email'),
