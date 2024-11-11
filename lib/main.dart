@@ -17,9 +17,9 @@ class MyApp extends StatelessWidget {
         title: 'Material App',
       debugShowCheckedModeBanner: false,
       //home: const HomePage(email: 'carguetar@unah.hn'),
-      home: LoginPage(),
+      //home: LoginPage(),
       //home: const PageNotFound(),
-      //home: const RegistroPage(),
+      home: RegistroPage(),
 
       onGenerateRoute: (settings) => MaterialPageRoute(
       builder: (context) {
