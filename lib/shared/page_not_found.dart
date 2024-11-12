@@ -16,7 +16,7 @@ class PageNotFound extends StatelessWidget {
               size: 120,
               color: Colors.lightBlue,
             ),
-            Text('Ruta no encontrada (≧ ﹏ ≦)',  
+            Text('Ruta no encontrada (≧ n ≦)',  
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),),
           ],
         ),
