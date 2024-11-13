@@ -2,54 +2,123 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 class PasswordCustomInput extends StatefulWidget {
-  const PasswordCustomInput({super.key, required this.controller});
+  const PasswordCustomInput({
+    super.key,
+    required this.passwordController,
+    required this.confirmPasswordController,
+    required this.focusNode, 
+  });
 
-  final TextEditingController controller;
+  final TextEditingController passwordController;
+  final TextEditingController confirmPasswordController;
+  final FocusNode focusNode;
 
   @override
-  State<PasswordCustomInput> createState() => _PasswordCustomInputState();
+  _PasswordCustomInputState createState() => _PasswordCustomInputState();
 }
 
 class _PasswordCustomInputState extends State<PasswordCustomInput> {
   bool _obscureText = true;
 
+  // Método para validar si las contraseñas coinciden
+  bool _validatePasswordsMatch() {
+    return widget.passwordController.text == widget.confirmPasswordController.text;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: widget.controller,
-      validator: (value) {
-        if (value!.isEmpty) {
-          return 'La Contraseña es Obligatoria';
-        }
-
-        if (value.length != 11) {
-          return 'La Contraseña debe tener exactamente 11 caracteres';
-        }
-
-        // Tenemos que verificar que solo sean numeros, ya que es el No. de Cuenta lo que necesitamos
-        for (int i = 0; i < value.length; i++) {
-          if (int.tryParse(value[i]) == null) {
-          return 'La Contraseña debe contener solo números';
-        }
-      }
-        return null;
-      },
-      keyboardType: TextInputType.text,
-      obscureText: _obscureText,
-      decoration: InputDecoration(
-        labelText: 'Contraseña',
-        prefixIcon: const Icon(Icons.lock),
-        suffixIcon: IconButton(
-          icon: Icon(_obscureText ? Icons.visibility_off : Icons.visibility),
-          color: _obscureText ? Colors.grey : Colors.blue,
-          onPressed: () {
-            setState(() {
-              _obscureText = !_obscureText;
-            });
+    return Column(
+      children: [
+        // Campo de contraseña
+        TextFormField(
+          controller: widget.passwordController,
+          focusNode: widget.focusNode,
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'La contraseña es obligatoria';
+            }
+            if (value.length < 8) {
+              return 'La contraseña debe tener al menos 8 caracteres';
+            }
+            if (!RegExp(r'[A-Z]').hasMatch(value)) {
+              return 'La contraseña debe contener al menos una letra mayúscula';
+            }
+            if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
+              return 'La contraseña debe contener al menos un carácter especial';
+            }
+            return null;
           },
+          obscureText: _obscureText,
+          decoration: InputDecoration(
+            labelText: 'Contraseña',
+            prefixIcon: const Icon(Icons.lock),
+            suffixIcon: IconButton(
+              icon: Icon(_obscureText ? Icons.visibility_off : Icons.visibility),
+              color: _obscureText ? Colors.grey : Colors.blue,
+              onPressed: () {
+                setState(() {
+                  _obscureText = !_obscureText;
+                });
+              },
+            ),
+            border: const OutlineInputBorder(),
+          ),
         ),
-        border: const OutlineInputBorder(),
-      ),
+        
+        const SizedBox(height: 20),
+
+        // Campo de confirmación de contraseña
+        TextFormField(
+          controller: widget.confirmPasswordController,
+          focusNode: widget.focusNode,
+          obscureText: _obscureText,
+          decoration: InputDecoration(
+            labelText: 'Confirmar Contraseña',
+            prefixIcon: const Icon(Icons.lock),
+            suffixIcon: IconButton(
+              icon: Icon(_obscureText ? Icons.visibility_off : Icons.visibility),
+              color: _obscureText ? Colors.grey : Colors.blue,
+              onPressed: () {
+                setState(() {
+                  _obscureText = !_obscureText;
+                });
+              },
+            ),
+            border: const OutlineInputBorder(),
+          ),
+        ),
+        
+        const SizedBox(height: 16),
+        
+        // Botón para mostrar datos en consola, si las contraseñas coinciden
+        ElevatedButton(
+          onPressed: () {
+            if (_validatePasswordsMatch()) {
+              // Aquí se muestran los datos en consola
+              print("Contraseña: ${widget.passwordController.text}");
+              print("Confirmación de Contraseña: ${widget.confirmPasswordController.text}");
+            } else {
+              // Si las contraseñas no coinciden, muestra un pop-up de error
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Error'),
+                  content: const Text('Las contraseñas no coinciden.'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Aceptar'),
+                    ),
+                  ],
+                ),
+              );
+            }
+          },
+          child: const Text('Mostrar datos'),
+        ),
+      ],
     );
   }
 }
@@ -58,9 +127,11 @@ class CampoNombre extends StatelessWidget {
   const CampoNombre({
     super.key,
     required this.nombreController,
+    required this.focusNode, 
   });
 
   final TextEditingController nombreController;
+  final FocusNode focusNode;
 
   void _mostrarDialogo(BuildContext context, String mensaje) {
     //SchedulerBinding.addPostFrameCallback: Este método asegura que el SnackBar y el diálogo solo se muestren 
@@ -86,6 +157,7 @@ class CampoNombre extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: nombreController,
+      focusNode: focusNode,
       maxLength: 10,
       validator: (value) {
         if (value == null || value.isEmpty) {
@@ -120,9 +192,11 @@ class CampoApellido extends StatelessWidget {
   const CampoApellido({
     super.key,
     required this.apellidoController,
+    required this.focusNode, 
   });
 
   final TextEditingController apellidoController;
+  final FocusNode focusNode;
 
   void _mostrarDialogo(BuildContext context, String mensaje) {
     SchedulerBinding.instance.addPostFrameCallback((_) {
@@ -146,6 +220,7 @@ class CampoApellido extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: apellidoController,
+      focusNode: focusNode,
       maxLength: 30,
       validator: (value) {
         if (value == null || value.isEmpty) {
@@ -179,9 +254,11 @@ class CampoCorreo extends StatelessWidget {
   const CampoCorreo({
     super.key,
     required this.correoController,
+    required this.focusNode, 
   });
 
   final TextEditingController correoController;
+  final FocusNode focusNode;
 
   void _mostrarDialogo(BuildContext context, String mensaje) {
     SchedulerBinding.instance.addPostFrameCallback((_) {
@@ -205,6 +282,7 @@ class CampoCorreo extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: correoController,
+      focusNode: focusNode,
       maxLength: 50,
       validator: (value) {
         if (value == null || value.isEmpty) {
@@ -242,9 +320,11 @@ class CampoTelefono extends StatelessWidget {
   const CampoTelefono({
     super.key,
     required this.telefonoController,
+    required this.focusNode, 
   });
 
   final TextEditingController telefonoController;
+  final FocusNode focusNode;
 
   void _mostrarDialogo(BuildContext context, String mensaje) {
     SchedulerBinding.instance.addPostFrameCallback((_) {
@@ -268,6 +348,7 @@ class CampoTelefono extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: telefonoController,
+      focusNode: focusNode,
       maxLength: 8,
       validator: (value) {
         if (value == null || value.isEmpty) {

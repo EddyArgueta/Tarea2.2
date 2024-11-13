@@ -13,6 +13,12 @@ class RegistroPage extends StatelessWidget {
   final TextEditingController confirmarPasswordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
+  // Focus nodes para rastrear cada campo
+  final FocusNode nombreFocusNode = FocusNode();
+  final FocusNode apellidoFocusNode = FocusNode();
+  final FocusNode correoFocusNode = FocusNode();
+  final FocusNode telefonoFocusNode = FocusNode();
+  final FocusNode passwordFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -20,72 +26,99 @@ class RegistroPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Registro de Usuario'),
       ),
-      backgroundColor:const Color.fromARGB(255, 252, 250, 166),
+      backgroundColor: const Color.fromARGB(255, 252, 250, 166),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(
           child: Form(
             key: formKey,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                //Nombre
-                CampoNombre(nombreController: nombreController),
-
-                //Apellido
-                const SizedBox(height: 20),
-                CampoApellido(apellidoController: apellidoController),
-
-                //Correo
-                const SizedBox(height: 20),
-                CampoCorreo(correoController: correoController),
-
-                //Numero de Telefono
-                const SizedBox(height: 20),
-                CampoTelefono(telefonoController: telefonoController),
-
-                //Password 
-                const SizedBox(height: 30),
-                PasswordCustomInput(controller: passwordController),
-
-                const Text('Recuerda que la Contraseña debe ser tu No. de Cuenta'),
-
-                //Confirmar Password
-                const SizedBox(height: 20),
-                PasswordCustomInput(controller: confirmarPasswordController),
-
-                
-                const SizedBox(height: 20),
-                ElevatedButton(
-                    onPressed: () {       
-                    formKey.currentState!.validate();
-                    formKey.currentState!.save();
-    
-                    // Navegamos a la pantalla de registro
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                  );
-                },
-                  style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange, 
-                  foregroundColor: Colors.black, 
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10), 
-                    side: const BorderSide(color: Colors.deepOrange), 
-                  ),
+                // Campo Nombre
+                CampoNombre(
+                  nombreController: nombreController,
+                  focusNode: nombreFocusNode,
                 ),
+
+                // Campo Apellido
+                const SizedBox(height: 20),
+                CampoApellido(
+                  apellidoController: apellidoController,
+                  focusNode: apellidoFocusNode,
+                ),
+
+                // Campo Correo
+                const SizedBox(height: 20),
+                CampoCorreo(
+                  correoController: correoController,
+                  focusNode: correoFocusNode,
+                ),
+
+                // Campo Teléfono
+                const SizedBox(height: 20),
+                CampoTelefono(
+                  telefonoController: telefonoController,
+                  focusNode: telefonoFocusNode,
+                ),
+
+                // Campo Contraseña
+                const SizedBox(height: 20),
+                PasswordCustomInput(
+                  passwordController: passwordController,
+                  confirmPasswordController: confirmarPasswordController,
+                  focusNode: passwordFocusNode,
+                ),
+
+                const SizedBox(height: 20),
+
+                // Botón de Registro
+                ElevatedButton(
+                  onPressed: () {
+                    // Al presionar el botón, se verifica que el formulario esté completo y correcto
+                    if (formKey.currentState!.validate()) {
+                      formKey.currentState!.save();
+
+                      // Navegación a la pantalla de inicio de sesión
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                      );
+                    } else {
+                      // Muestra un mensaje si hay campos que aún son inválidos
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text('Error'),
+                          content: const Text('Por favor, complete todos los campos correctamente.'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('Aceptar'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                    foregroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      side: const BorderSide(color: Colors.deepOrange),
+                    ),
+                  ),
                   child: const Text('¡Registrar!'),
                 ),
               ],
-              
             ),
           ),
         ),
       ),
     );
-    
   }
 }
 
