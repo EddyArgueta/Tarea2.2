@@ -65,28 +65,28 @@ class RegistroPage extends StatelessWidget {
                       nombreController: nombreController,
                       focusNode: nombreFocusNode,
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 30),
 
                     // Campo Apellido
                     CampoApellido(
                       apellidoController: apellidoController,
                       focusNode: apellidoFocusNode,
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 30),
 
                     // Campo Correo
                     CampoCorreo(
                       correoController: correoController,
                       focusNode: correoFocusNode,
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 30),
 
                     // Campo Teléfono
                     CampoTelefono(
                       telefonoController: telefonoController,
                       focusNode: telefonoFocusNode,
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 30),
 
                     
                     // Campo de contraseña
@@ -94,14 +94,14 @@ class RegistroPage extends StatelessWidget {
                       passwordController: passwordController,
                       focusNode: passwordFocusNode,
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 30),
 
                     // Campo de contraseña
                     ConfirmPasswordInput(
                       confirmPasswordController: confirmarPasswordController,
                       focusNode: confirmPasswordFocusNode,
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 30),
 
                     ElevatedButton(
                       onPressed: () {

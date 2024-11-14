@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
 
       onGenerateRoute: (settings) => MaterialPageRoute(
       builder: (context) {
-      if (settings.name == '/') return const HomePage(email: 'carguetar@unah.hn');
+      if (settings.name == '/') return  LoginPage();
 
       return const PageNotFound();
       },
