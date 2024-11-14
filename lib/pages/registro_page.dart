@@ -19,110 +19,138 @@ class RegistroPage extends StatelessWidget {
   final FocusNode correoFocusNode = FocusNode();
   final FocusNode telefonoFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
+  final FocusNode confirmPasswordFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Registro de Usuario'),
-      ),
-      backgroundColor: const Color.fromARGB(255, 252, 250, 166),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: SingleChildScrollView(
-          child: Form(
-            key: formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Campo Nombre
-                CampoNombre(
-                  nombreController: nombreController,
-                  focusNode: nombreFocusNode,
+      // Fondo de pantalla con imagen desde una URL
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(
+                  'https://img.freepik.com/fotos-premium/resumen-fondo-diseno-imagenes-fondos-pantalla-ai-generado_643360-81884.jpg',
                 ),
-
-                // Campo Apellido
-                const SizedBox(height: 20),
-                CampoApellido(
-                  apellidoController: apellidoController,
-                  focusNode: apellidoFocusNode,
-                ),
-
-                // Campo Correo
-                const SizedBox(height: 20),
-                CampoCorreo(
-                  correoController: correoController,
-                  focusNode: correoFocusNode,
-                ),
-
-                // Campo Teléfono
-                const SizedBox(height: 20),
-                CampoTelefono(
-                  telefonoController: telefonoController,
-                  focusNode: telefonoFocusNode,
-                ),
-
-                // Campo Contraseña
-                const SizedBox(height: 20),
-                PasswordCustomInput(
-                  passwordController: passwordController,
-                  confirmPasswordController: confirmarPasswordController,
-                  focusNode: passwordFocusNode,
-                ),
-
-                const SizedBox(height: 20),
-
-                // Botón de Registro
-                ElevatedButton(
-                  onPressed: () {
-                    // Al presionar el botón, se verifica que el formulario esté completo y correcto
-                    if (formKey.currentState!.validate()) {
-                      formKey.currentState!.save();
-
-                      // Navegación a la pantalla de inicio de sesión
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
-                      );
-                    } else {
-                      // Muestra un mensaje si hay campos que aún son inválidos
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text('Error'),
-                          content: const Text('Por favor, complete todos los campos correctamente.'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('Aceptar'),
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
-                    foregroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      side: const BorderSide(color: Colors.deepOrange),
-                    ),
-                  ),
-                  child: const Text('¡Registrar!'),
-                ),
-              ],
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-        ),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: SingleChildScrollView(
+              child: Form(
+                key: formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const SizedBox(height: 60),
+                    
+                    const Center(
+                      child: Text(
+                        'Registro de Usuario',
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+
+                    // Campo Nombre
+                    CampoNombre(
+                      nombreController: nombreController,
+                      focusNode: nombreFocusNode,
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Campo Apellido
+                    CampoApellido(
+                      apellidoController: apellidoController,
+                      focusNode: apellidoFocusNode,
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Campo Correo
+                    CampoCorreo(
+                      correoController: correoController,
+                      focusNode: correoFocusNode,
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Campo Teléfono
+                    CampoTelefono(
+                      telefonoController: telefonoController,
+                      focusNode: telefonoFocusNode,
+                    ),
+                    const SizedBox(height: 20),
+
+                    
+                    // Campo de contraseña
+                    PasswordInput(
+                      passwordController: passwordController,
+                      focusNode: passwordFocusNode,
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Campo de contraseña
+                    ConfirmPasswordInput(
+                      confirmPasswordController: confirmarPasswordController,
+                      focusNode: confirmPasswordFocusNode,
+                    ),
+                    const SizedBox(height: 20),
+
+                    ElevatedButton(
+                      onPressed: () {
+                        if (formKey.currentState!.validate()) {
+                          if (passwordController.text != confirmarPasswordController.text) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text('Error'),
+                                content: const Text('Las contraseñas no coinciden.'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('Aceptar'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => LoginPage()),
+                            );
+                          }
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange,
+                        foregroundColor: Colors.black,
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        elevation: 5,
+                      ),
+                      child: const Text(
+                        '¡Registrar!',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 }
-
-
-
-
-
