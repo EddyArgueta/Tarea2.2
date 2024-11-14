@@ -182,9 +182,13 @@ class CampoNombre extends StatelessWidget {
           _mostrarDialogo(context, 'El campo Nombre no puede estar vacío');
           return '';
         }
-        if (value.length < 3) {
-          _mostrarDialogo(context, 'El Nombre debe tener al menos 3 caracteres');
-          return '';
+        if (value.length < 3 || value.length > 10) {
+          _mostrarDialogo(context, 'El nombre debe tener entre 3 y 10 caracteres.');
+          return 'Debe tener entre 3 y 10 caracteres';
+        }
+        if (value.contains(RegExp(r'\d'))) {
+          _mostrarDialogo(context, 'El nombre debe contener solo letras');
+          return 'Debe contener solo letras';
         }
         return null;
       },
@@ -351,6 +355,7 @@ class CampoTelefono extends StatelessWidget {
     return TextFormField(
       controller: telefonoController,
       focusNode: focusNode,
+      maxLength: 8,
       style: const TextStyle(color: Colors.white),
       validator: (value) {
         if (value == null || value.isEmpty) {

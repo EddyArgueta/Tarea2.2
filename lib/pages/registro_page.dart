@@ -140,7 +140,7 @@ class RegistroPage extends StatelessWidget {
                         elevation: 5,
                       ),
                       child: const Text(
-                        '¡Registrar!',
+                        '¡Registrarse!',
                         style: TextStyle(fontSize: 18),
                       ),
                     ),

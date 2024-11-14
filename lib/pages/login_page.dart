@@ -81,9 +81,8 @@ class _LoginPageState extends State<LoginPage> {
                               passwordController: passwordController,
                               focusNode: passwordFocusNode,
                             ),
-                            const SizedBox(height: 20),
                             
-                            const SizedBox(height: 20.0),
+                            const SizedBox(height: 30.0),
                             ElevatedButton(
                               onPressed: () {
                                 if (formKey.currentState!.validate()) {
