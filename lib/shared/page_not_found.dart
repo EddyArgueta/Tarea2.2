@@ -10,7 +10,6 @@ class PageNotFound extends StatelessWidget {
         children: [
           // Imagen de fondo
           Container(
-            
             decoration: const BoxDecoration(
               image: DecorationImage(
                 image: NetworkImage(
@@ -20,19 +19,27 @@ class PageNotFound extends StatelessWidget {
               ),
             ),
           ),
-
-          const Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
+          // Contenido centrado
+          const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
                   Icons.not_interested,
                   size: 120,
                   color: Colors.white,
                 ),
-                Text('Ruta no encontrada (≧ n ≦)',  
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+                SizedBox(height: 20), // Espaciado entre el icono y el texto
+                Text(
+                  'Ruta no encontrada (≧ n ≦)',  
+                  style: TextStyle(
+                    color: Colors.white, 
+                    fontWeight: FontWeight.bold, 
+                    fontSize: 20,
+                  ),
                 ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
